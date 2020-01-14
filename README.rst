@@ -6,6 +6,14 @@ ngtcp2
 ngtcp2 project is an effort to implement QUIC protocol which is now
 being discussed in IETF QUICWG for its standardization.
 
+MbedTLS integration
+-------------------
+
+This branch is the demonstrator for the ongoing work on adding QUIC support 
+to the MbedTLS implementation. 
+
+See "Build from git" for the instructions for building ngtcp2 with MbedTLS.
+
 Branching strategy
 ------------------
 
@@ -59,13 +67,13 @@ Build from git
 
 .. code-block:: text
 
-   $ git clone --depth 1 -b OpenSSL_1_1_1d-quic-draft-24 https://github.com/tatsuhiro-t/openssl
-   $ cd openssl
-   $ # For Linux
-   $ ./config enable-tls1_3 --prefix=$PWD/build
-   $ make -j$(nproc)
-   $ make install_sw
-   $ cd ..
+   $ # Get and build mbedtls 
+   $ git clone --depth 1 -b ietf-quic-handshake-feature https://github.com/ARMmbed/mbed-tls-tls-1.3-prototype 
+   $ cd mbed-tls-tls-1.3-prototype 
+   $ cmake . 
+   $ make install
+   $ cd .. 
+   $ # Get and build nghttp3
    $ git clone https://github.com/ngtcp2/nghttp3
    $ cd nghttp3
    $ autoreconf -i
@@ -73,13 +81,14 @@ Build from git
    $ make -j$(nproc) check
    $ make install
    $ cd ..
-   $ git clone https://github.com/ngtcp2/ngtcp2
+   $ # Get ngtcp2 
+   $ git clone --depth 1 -b oesh_mbedtls_poc_integration https://github.com/oesh/ngtcp2
    $ cd ngtcp2
    $ autoreconf -i
    $ # For Mac users who have installed libev with MacPorts, append
    $ # ',-L/opt/local/lib' to LDFLAGS, and also pass
    $ # CPPFLAGS="-I/opt/local/include" to ./configure.
-   $ ./configure PKG_CONFIG_PATH=$PWD/../openssl/build/lib/pkgconfig:$PWD/../nghttp3/build/lib/pkgconfig LDFLAGS="-Wl,-rpath,$PWD/../openssl/build/lib"
+   $ ./configure PKG_CONFIG_PATH=$PWD/../mbed-tls-tls-1.3-prototype/library:$PWD/../nghttp3/build/lib/pkgconfig LDFLAGS="-Wl,-rpath,$PWD/../mbed-tls-tls-1.3-prototype/library" CPPFLAGS="-I$PWD/../mbed-tls-tls-1.3-prototype/include"
    $ make -j$(nproc) check
 
 Client/Server
