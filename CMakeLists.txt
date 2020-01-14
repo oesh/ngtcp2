@@ -85,6 +85,15 @@ else()
   set(OPENSSL_INCLUDE_DIRS  "")
   set(OPENSSL_LIBRARIES     "")
 endif()
+
+# mbedtls (for examples)
+set(HAVE_MBEDTLS    ${MBEDTLS_FOUND})
+if(MBEDTLS_FOUND)
+  set(MBEDTLS_INCLUDE_DIRS  ${MBEDTLS_INCLUDE_DIR})
+else()
+  set(MBEDTLS_INCLUDE_DIRS  "")
+  set(MBEDTLS_LIBRARIES     "")
+endif()
 # libev (for examples)
 set(HAVE_LIBEV      ${LIBEV_FOUND})
 # libnghttp3 (for examples)
@@ -277,6 +286,7 @@ message(STATUS "summary of build options:
     Test:
       CUnit:          ${HAVE_CUNIT} (LIBS='${CUNIT_LIBRARIES}')
     Libs:
+      MbedTLS:        ${HAVE_MBEDTLS} (LIBS='${MBEDTLS_LIBRARIES}')
       OpenSSL:        ${HAVE_OPENSSL} (LIBS='${OPENSSL_LIBRARIES}')
       Libev:          ${HAVE_LIBEV} (LIBS='${LIBEV_LIBRARIES}')
       Libnghttp3:     ${HAVE_LIBNGHTTP3} (LIBS='${LIBNGHTTP3_LIBRARIES}')

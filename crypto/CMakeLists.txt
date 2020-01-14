@@ -21,9 +21,9 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-if(OPENSSL_FOUND)
+if(MBEDTLS_FOUND)
   add_subdirectory(includes)
-  add_subdirectory(openssl)
+  add_subdirectory(mbedtls)
 else()
-  message(WARNING "libngtcp2_crypto_openssl library is disabled due to lack of good OpenSSL")
+  message(WARNING "libngtcp2_crypto_mbedtls library is disabled due to lack of good MbedTLS")
 endif()

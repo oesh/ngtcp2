@@ -49,6 +49,10 @@ AC_SUBST(CRYPTO_OPENSSL_LT_CURRENT, 0)
 AC_SUBST(CRYPTO_OPENSSL_LT_REVISION, 0)
 AC_SUBST(CRYPTO_OPENSSL_LT_AGE, 0)
 
+AC_SUBST(CRYPTO_MBEDTLS_LT_CURRENT, 0)
+AC_SUBST(CRYPTO_MBEDTLS_LT_REVISION, 0)
+AC_SUBST(CRYPTO_MBEDTLS_LT_AGE, 0)
+
 # from nghttp2
 major=`echo $PACKAGE_VERSION |cut -d. -f1 | sed -e "s/[^0-9]//g"`
 minor=`echo $PACKAGE_VERSION |cut -d. -f2 | sed -e "s/[^0-9]//g"`
@@ -135,6 +139,15 @@ fi
 AM_CONDITIONAL([HAVE_CUNIT], [ test "x${have_cunit}" = "xyes" ])
 
 AM_CONDITIONAL([ENABLE_SHARED], [ test "x${enable_shared}" = "xyes" ])
+
+
+# mbedtls (for examples)
+PKG_CHECK_MODULES([MBEDTLS], [mbedtls >= 1.1.1],
+                  [have_mbedtls=yes], [have_mbedtls=no])
+if test "x${have_mbedtls}" = "xno"; then
+  AC_MSG_NOTICE($MBEDTLS_PKG_ERRORS)
+fi
+AM_CONDITIONAL([HAVE_MBEDTLS], [ test "x${have_mbedtls}" = "xyes" ])
 
 # openssl (for examples)
 PKG_CHECK_MODULES([OPENSSL], [openssl >= 1.1.1],
@@ -365,6 +378,8 @@ AC_CONFIG_FILES([
   lib/includes/ngtcp2/version.h
   tests/Makefile
   crypto/Makefile
+  crypto/mbedtls/Makefile
+  crypto/mbedtls/libngtcp2_crypto_mbedtls.pc
   crypto/openssl/Makefile
   crypto/openssl/libngtcp2_crypto_openssl.pc
   crypto/includes/Makefile
@@ -399,11 +414,13 @@ AC_MSG_NOTICE([summary of build options:
       Static:         ${enable_static}
     Crypto helper libraries:
       libngtcp2_crypto_openssl: ${have_openssl}
+      libngtcp2_crypto_mbedtls: ${have_mbedtls}
     Test:
       CUnit:          ${have_cunit} (CFLAGS='${CUNIT_CFLAGS}' LIBS='${CUNIT_LIBS}')
     Debug:
       Debug:          ${debug} (CFLAGS='${DEBUGCFLAGS}')
     Libs:
+      MbedTLS:        ${have_mbedtls} (CFLAGS='${MBEDTLS_CFLAGS}' LIBS='${MBEDTLS_LIBS}')
       OpenSSL:        ${have_openssl} (CFLAGS='${OPENSSL_CFLAGS}' LIBS='${OPENSSL_LIBS}')
       Libev:          ${have_libev} (CFLAGS='${LIBEV_CFLAGS}' LIBS='${LIBEV_LIBS}')
       Libnghttp3:     ${have_libnghttp3} (CFLAGS='${LIBNGHTTP3_CFLAGS}' LIBS='${LIBNGHTTP3_LIBS}')
